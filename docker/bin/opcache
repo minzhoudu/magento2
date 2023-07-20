@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+if [ "$1" == "disable" ]; then
+  bin/cli sed -i -e 's/^zend_extension/\;zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+  docker restart phpfpm
+  echo '========= OPCache has been disabled ========='
+elif [ "$1" == "enable" ]; then
+  bin/cli sed -i -e 's/^\;zend_extension/zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+  docker restart phpfpm
+  echo '========= OPCache has been enabled ========='
+else
+  echo "Please specify either 'enable' or 'disable' as an argument"
+fi

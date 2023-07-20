@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ "$1" ]; then
+bin/cli bin/magento setup:store-config:set --base-url="http://$1" &&
+bin/cli bin/magento config:set web/secure/base_url https://$1/ &&
+bin/cli bin/magento config:set web/unsecure/base_url http://$1/ &&
+bin/cli bin/magento config:set web/secure/base_link_url https://$1/ &&
+bin/cli bin/magento config:set web/unsecure/base_link_url http://$1/
+else
+  echo "Please specify url! For example: magento2-internship.test"
+fi

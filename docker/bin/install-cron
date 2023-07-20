@@ -1,0 +1,2 @@
+#!/bin/bash
+bin/cron-cli bin/magento cron:install

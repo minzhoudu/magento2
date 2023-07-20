@@ -1,0 +1,4 @@
+#!/bin/bash
+[ -z "$1" ] && echo "Please specify a .sql file (ex. local.sql.xz)" && exit
+CONTAINER_ID=$(docker-compose ps -q | head -n $(docker-compose ps | grep db-m2.4 -n | cut -f 1 -d ':') | head -1)
+docker exec -i ${CONTAINER_ID} xzcat <"$@" | docker exec -i ${CONTAINER_ID} mysql -hdb-m2.4 -umagento -pmagento magento

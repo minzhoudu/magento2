@@ -1,0 +1,9 @@
+[mysqld]
+# https://dba.stackexchange.com/a/19139
+max_allowed_packet=256M
+# https://devdocs.magento.com/cloud/docker/docker-containers-service.html#database-container
+innodb_buffer_pool_size = 134217728
+
+# https://devdocs.magento.com/guides/v2.4/performance-best-practices/configuration.html#indexers
+optimizer_switch='rowid_filter=off'
+optimizer_use_condition_selectivity = 1

@@ -1,0 +1,4 @@
+2023/04/03 15:45:30 [warn] 116#116: server name "http://fransiza.motobikeshop" has suspicious symbols in /data/nginx/proxy_host/1.conf:15
+2023/04/03 15:49:31 [warn] 116#116: server name "http://fransiza.motobikeshop" has suspicious symbols in /data/nginx/proxy_host/1.conf:15
+2023/04/03 16:41:55 [warn] 116#116: server name "http://html" has suspicious symbols in /data/nginx/proxy_host/1.conf:15
+2023/04/03 17:41:55 [warn] 116#116: server name "http://html" has suspicious symbols in /data/nginx/proxy_host/1.conf:15

@@ -1,0 +1,2 @@
+#!/bin/bash
+bin/clinotty /var/www/html/vendor/friendsofphp/php-cs-fixer/php-cs-fixer "$@"

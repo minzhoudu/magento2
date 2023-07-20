@@ -1,0 +1,2 @@
+#!/bin/bash
+docker-compose exec phpfpm find ./var/log/ -type f -name '*.log' -exec sh -c '> {}' \;

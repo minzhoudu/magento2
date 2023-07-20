@@ -1,0 +1,6 @@
+.DS_Store
+*.icloud
+.vscode/
+.idea/
+/data/elasticsearch7/*
+!/data/elasticsearch7/.gitkeep

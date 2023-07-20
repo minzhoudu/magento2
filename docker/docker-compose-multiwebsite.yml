@@ -1,0 +1,180 @@
+version: "3"
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ../
+      dockerfile: docker/images/nginx/Dockerfile
+      args:
+        UID: 1000
+    restart: always
+    ports:
+      - "80:8000"
+      - "443:8443"
+    links:
+      - db-m2.4
+      - phpfpm
+    volumes: &appvolumes
+      - sockdata-m2.4:/sock
+      - ../magento2:/var/www/html:delegated
+      - ../magento2/nginx.conf:/var/www/html/nginx.conf:delegated
+      - .ssh:/var/www/.ssh
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.10
+
+  phpfpm:
+    container_name: phpfpm
+    build:
+      context: ../
+      dockerfile: docker/build/PHP
+      args:
+        UID: 1000
+    links:
+      - db-m2.4
+    volumes: *appvolumes
+    restart: always
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.11
+
+  # cron:
+  #   container_name: cron
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/build/Cron
+  #     args:
+  #       UID: 1000
+  #   user: root
+  #   command: /usr/local/bin/cronstart
+  #   tty: true
+  #   links:
+  #     - db-m2.4
+  #   volumes: *appvolumes
+  #   restart: always
+  #   extra_hosts:
+  #     docker.for.lin.host.internal: 172.16.238.1
+  #     docker.for.lin.localhost: 172.16.238.1
+  #     host.docker.internal: 172.16.238.1
+  #   networks:
+  #     magento-network:
+  #       ipv4_address: 172.16.238.12
+
+  db-m2.4:
+    container_name: db-m2.4
+    build:
+      context: ../
+      dockerfile: docker/build/Database
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file: env/db.env
+    volumes:
+      - dbdata-m2.4:/var/lib/mysql
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.13
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.14
+
+  redis-session:
+    container_name: redis-session
+    image: redis
+    restart: always
+    ports:
+      - 6379
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.15
+
+  elasticsearch7:
+    container_name: elasticsearch7
+    build:
+      context: ../
+      dockerfile: docker/build/Elastic7
+      args:
+        UID: 1000
+    volumes:
+      - ./config/elasticsearch7.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./data/elasticsearch7:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xmx2560m -Xms2560m"
+      discovery.type: single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    extra_hosts:
+      docker.for.lin.host.internal: 172.16.238.1
+      docker.for.lin.localhost: 172.16.238.1
+      host.docker.internal: 172.16.238.1
+    networks:
+      magento-network:
+        ipv4_address: 172.16.238.16
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080
+    restart: always
+
+networks:
+  magento-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+
+volumes:
+  appdata-m2.4:
+    labels:
+      com.project.name: "moto-bike-shop-m2.4"
+      com.project.description: "Application data"
+  dbdata-m2.4:
+    driver: local
+    labels:
+      com.project.name: "moto-bike-shop-m2.4"
+      com.project.description: "Database data"
+  sockdata-m2.4:
+    labels:
+      com.project.name: "moto-bike-shop-m2.4"
+      com.project.description: "Socket data"
