@@ -1,0 +1,13 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hello_world" xsi:type="object">BeeIT\CLImodule\Console\Command\HelloWorldCommand</item>
+                <item name="todocrud_create" xsi:type="object">BeeIT\CLImodule\Console\Command\CreateCommand</item>
+                <item name="todocrud_update" xsi:type="object">BeeIT\CLImodule\Console\Command\UpdateCommand</item>
+                <item name="todocrud_delete" xsi:type="object">BeeIT\CLImodule\Console\Command\DeleteCommand</item>
+                <item name="todocrud_show_all" xsi:type="object">BeeIT\CLImodule\Console\Command\ShowAllCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

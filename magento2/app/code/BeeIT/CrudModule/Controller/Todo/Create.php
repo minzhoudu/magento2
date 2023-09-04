@@ -2,28 +2,46 @@
 
 namespace BeeIT\CrudModule\Controller\Todo;
 
-use BeeIT\CrudModule\Model\TodoItem;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Result\PageFactory;
 
-class create implements HttpGetActionInterface
+use BeeIT\CrudModule\Model\TodoItemFactory;
+
+class Create implements HttpGetActionInterface
 {
-    protected $model;
-    protected $request;
+    protected RequestInterface $request;
+    protected TodoItemFactory $_todoItemFactory;
+    protected PageFactory $_pageFactory;
 
-    public function __construct(ObjectManagerInterface $objectManager, RequestInterface $request)
-    {
-        $this->model = $objectManager->create(TodoItem::class);
+    public function __construct(
+        TodoItemFactory $todoItemFactory,
+        RequestInterface $request,
+        PageFactory $pageFactory
+    ) {
+        $this->_todoItemFactory = $todoItemFactory;
         $this->request = $request;
+        $this->_pageFactory = $pageFactory;
     }
 
-    public function execute(): string
+    public function execute()
     {
-        $message = 'Done';
-        $this->model->setData('test123');
-        $this->model->save();
+        $message = "Error occurred";
+        $description = $this->request->getParam('description');
 
-        return $message;
+        if ($description) {
+            $model = $this->_todoItemFactory->create();
+            $model->setData('description', $description);
+            $model->save();
+            $message = "Todo item created with description $description";
+        }
+
+        $resultPage = $this->_pageFactory->create();
+        $resultPage
+            ->getLayout()
+            ->getBlock('crudmodule.custom.block')
+            ->setData("message", $message);
+
+        return $resultPage;
     }
 }
