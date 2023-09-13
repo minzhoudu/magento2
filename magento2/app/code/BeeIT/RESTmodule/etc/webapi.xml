@@ -6,4 +6,34 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route method="GET" url="/V1/crud/readAll/">
+        <service class="BeeIT\RESTmodule\Api\TodoItemRepositoryInterface" method="getAll"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/crud/read/">
+        <service class="BeeIT\RESTmodule\Api\TodoItemRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/crud/create/">
+        <service class="BeeIT\RESTmodule\Api\TodoItemRepositoryInterface" method="create"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/crud/update/">
+        <service class="BeeIT\RESTmodule\Api\TodoItemRepositoryInterface" method="update"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/crud/delete/">
+        <service class="BeeIT\RESTmodule\Api\TodoItemRepositoryInterface" method="delete"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>
