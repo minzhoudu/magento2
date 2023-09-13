@@ -1,0 +1,22 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="custom_admin_tab" sortOrder="120" translate="label">
+            <label>Bee IT</label>
+        </tab>
+        <section id="todo_item" translate="label" sortOrder="100" showInWebsite="1" showInStore="1" showInDefault="1">
+            <label>Todo Item</label>
+            <tab>custom_admin_tab</tab>
+            <resource>BeeIT_ADMINmodule::custommenu_field</resource>
+
+            <group id="general_settings_group" showInWebsite="1" showInStore="1" showInDefault="1">
+                <label>General Settings</label>
+                <comment>Some short description</comment>
+                <field id="custom_field1" translate="label" type="text" sortOrder="100" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Import Url</label>
+                    <comment>Only valid url's are accepted</comment>
+                    <validate>validate-url</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
