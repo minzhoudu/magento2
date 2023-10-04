@@ -1,0 +1,30 @@
+<?php
+use BeeIT\ADMINmodule\Block\Adminhtml\System\Config\Button;
+/** @var Button $block */
+?>
+
+<button type="button" class="scalable action primary" id="custom_button">
+    <span><?php echo __('UPDATE NOW'); ?></span>
+</button>
+
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+        $('#custom_button').on('click', function () {
+            $.ajax({
+                type: 'GET',
+                url: '/test/todo/update',
+                dataType: 'json',
+                success: function (res) {
+                    console.log("success")
+                    console.log(res)
+                },
+                error: function(e) {
+                    console.log("error")
+                    console.log(e)
+                }
+            });
+        });
+    });
+</script>

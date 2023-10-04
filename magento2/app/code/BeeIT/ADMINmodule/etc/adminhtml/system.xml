@@ -11,10 +11,21 @@
             <group id="general_settings_group" showInWebsite="1" showInStore="1" showInDefault="1">
                 <label>General Settings</label>
                 <comment>Some short description</comment>
-                <field id="custom_field1" translate="label" type="text" sortOrder="100" showInWebsite="1" showInStore="1" showInDefault="1">
+
+                <field id="import_url" translate="label" type="text" sortOrder="100" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Import Url</label>
-                    <comment>Only valid url's are accepted</comment>
+                    <comment>Only valid URLs are accepted</comment>
                     <validate>validate-url</validate>
+                </field>
+
+                <field id="update_existing_checkbox" translate="label" type="select" sortOrder="100" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Update existing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="custom_button" translate="label" type="button" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Action</label>
+                    <frontend_model>BeeIT\ADMINmodule\Block\Adminhtml\System\Config\Button</frontend_model>
                 </field>
             </group>
         </section>
