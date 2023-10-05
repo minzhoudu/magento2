@@ -5,7 +5,10 @@ namespace BeeIT\ADMINmodule\Controller\Todo;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\RequestInterface;
+
 use BeeIT\CrudModule\Model\TodoItemFactory;
+use BeeIT\ADMINmodule\Logger\CustomLogger;
 
 class Update implements HttpGetActionInterface
 {
@@ -15,15 +18,21 @@ class Update implements HttpGetActionInterface
     private ScopeConfigInterface $config;
     protected JsonFactory $resultJsonFactory;
     protected TodoItemFactory $todoItemFactory;
+    protected CustomLogger $logger;
+    protected RequestInterface $request;
 
     public function __construct(
         JsonFactory $resultJsonFactory,
         ScopeConfigInterface $config,
-        TodoItemFactory $todoItemFactory
+        TodoItemFactory $todoItemFactory,
+        CustomLogger $logger,
+        RequestInterface $request
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->config = $config;
         $this->todoItemFactory = $todoItemFactory;
+        $this->logger = $logger;
+        $this->request = $request;
     }
 
     public function getUrl()
@@ -49,7 +58,11 @@ class Update implements HttpGetActionInterface
         $fetchedTodos = $this->fetchData($url);
         $result = $this->resultJsonFactory->create();
 
+        $this->logger->info("HTTP verb: {$this->request->getMethod()}");
+        $this->logger->info("URL of the request: {$url}");
+
         if (!$shouldUpdate) {
+            $this->logger->alert('Nothing was updated');
             return $result->setData(['status' => 'Not Updated']);
         }
 
@@ -57,6 +70,7 @@ class Update implements HttpGetActionInterface
             $model = $this->todoItemFactory->create();
             $model->setData('description', $todo->description);
             $model->save();
+            $this->logger->info("TODO: {$todo->id} {$todo->description}");
         }
 
 
